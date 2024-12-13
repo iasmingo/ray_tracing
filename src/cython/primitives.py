@@ -1,4 +1,3 @@
-import math
 import cython
 
 @cython.cclass
@@ -7,9 +6,9 @@ class Point3:
     Representa um ponto em um espaço tridimensional.
 
     Atributos:
-        x (float): Coordenada X do ponto.
-        y (float): Coordenada Y do ponto.
-        z (float): Coordenada Z do ponto.
+        x (cython.double): Coordenada X do ponto.
+        y (cython.double): Coordenada Y do ponto.
+        z (cython.double): Coordenada Z do ponto.
     """
     x = cython.declare(cython.double, visibility='public')
     y = cython.declare(cython.double, visibility='public')
@@ -47,9 +46,9 @@ class Vector3():
     Representa um vetor em um espaço tridimensional.
 
     Atributos:
-        x (float): Componente do vetor na direção X.
-        y (float): Componente do vetor na direção Y.
-        z (float): Componente do vetor na direção Z.
+        x (cython.double): Componente do vetor na direção X.
+        y (cython.double): Componente do vetor na direção Y.
+        z (cython.double): Componente do vetor na direção Z.
     """
     x = cython.declare(cython.double, visibility='public')
     y = cython.declare(cython.double, visibility='public')
