@@ -2,5 +2,5 @@ from setuptools import setup
 from Cython.Build import cythonize
 
 setup(
-    ext_modules = cythonize(["primitives.py"])
+    ext_modules = cythonize(["cython_classes/primitives.py"])
 )
