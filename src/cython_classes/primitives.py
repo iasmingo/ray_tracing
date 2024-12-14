@@ -1,5 +1,5 @@
+from __future__ import annotations
 import cython
-
 @cython.cclass
 class Point3:
     """
@@ -19,16 +19,18 @@ class Point3:
         self.y = y
         self.z = z
 
-    def dist(p1, p2: Point3):
-        dx = p1.x - p2.x
-        dy = p1.y - p2.y
-        dz = p1.z - p2.z
+    @cython.cfunc
+    def dist(self, p: Point3):
+        dx = self.x - p.x
+        dy = self.y - p.y
+        dz = self.z - p.z
         return (dx**2 + dy**2 + dz**2) ** (1/2)
 
     def __str__(p):
         return f"({p.x}, {p.y}, {p.z})"
-
-    def to(self, p: Vector3) -> Vector3:
+    
+    @cython.cfunc
+    def to(self, p: Point3) -> Vector3:
         """
         Retorna o vetor até o ponto p.
 
@@ -38,8 +40,8 @@ class Point3:
         
         return Vector3(p.x - self.x, p.y - self.y, p.z - self.z)
     
-    # @cython.locals(p = Point3, v = Vector3) # type: ignore
-    def translate(p, v) -> Point3:
+    @cython.cfunc
+    def translate(p, v: Vector3) -> Point3:
         return Point3(p.x + v.x, p.y + v.y, p.z + v.z)
     
 @cython.cclass
@@ -61,9 +63,9 @@ class Vector3():
         self.y = y
         self.z = z     
 
-    def __str__(p):
-        return f"({p.x}, {p.y}, {p.z})"
-        
+    def __str__(self):
+        return f"({self.x}, {self.y}, {self.z})"
+  
     def __add__(p1, p2: Vector3) -> Vector3:
         return Vector3(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z)
 
@@ -73,12 +75,12 @@ class Vector3():
     def __mul__(p1, p2: Vector3) -> Vector3:
         return (p1.x * p2.x) + (p1.y * p2.y) + (p1.z * p2.z)
     
-    # @cython.locals(k = cython.double)
-    def scale(v, k: cython.double) -> Vector3:
+    @cython.cfunc
+    def scale(v, k: cython.double) -> cython.double:
         """
         Retorna o produto do vetor pelo escalar k.
 
         Argumentos:
-            - k (float) escalar
+            - k (cython.double) escalar
         """
         return Vector3(k*v.x, k*v.y, k*v.z)
