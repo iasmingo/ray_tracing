@@ -73,23 +73,32 @@ class Vector3():
     x = cython.declare(cython.double, visibility='public')
     y = cython.declare(cython.double, visibility='public')
     z = cython.declare(cython.double, visibility='public')
-    
+    i: Vector3
+    j: Vector3
+    k: Vector3
+
     def __init__(self, x, y, z):
         self.x = x
         self.y = y
-        self.z = z     
+        self.z = z
 
     def __str__(self):
         return f"({self.x}, {self.y}, {self.z})"
     
     def __add__(self, other):
         return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
+    
+    def __neg__(self):
+        return Vector3(-self.x, -self.y, -self.z)
 
     def __sub__(self, other):
         return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
     
     def __mul__(self, other) -> cython.double:
         return (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
+    
+    def __div__(self, k: cython.double) -> Vector3:
+        return Vector3(self.x/k, self.y/k, self.z/k)
     
     @cython.cfunc
     def scale(self, k: cython.double) -> cython.double:
@@ -121,3 +130,14 @@ class Vector3():
         Retorna a norma do vetor
         """
         return (self * self)**(1/2)
+    
+    @cython.cfunc
+    def normalized(self) -> cython.double:
+        """
+        Retorna o vetor normalizado
+        """
+        return self.scale(1/self.norm())
+  
+Vector3.i = Vector3(1, 0, 0)
+Vector3.j = Vector3(0, 1, 0)
+Vector3.k = Vector3(0, 0, 1)
