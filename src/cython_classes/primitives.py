@@ -1,5 +1,6 @@
 from __future__ import annotations
 import cython
+
 @cython.cclass
 class Point3:
     """
@@ -20,7 +21,15 @@ class Point3:
         self.z = z
 
     @cython.cfunc
-    def dist(self, p: Point3):
+    def dist(self, p: Point3) -> cython.double:
+        """
+        Retorna a distancia até o ponto p
+
+        Argumentos:
+            - p (Point3) : ponto de destino
+
+        Valor de Retono: (double) A distancia entre os pontos
+        """
         dx = self.x - p.x
         dy = self.y - p.y
         dz = self.z - p.z
@@ -84,3 +93,4 @@ class Vector3():
             - k (cython.double) escalar
         """
         return Vector3(k*v.x, k*v.y, k*v.z)
+
