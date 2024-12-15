@@ -10,7 +10,7 @@ def main():
     b = Point3(-1, 0, 1)
     v = a.to(b)
     u = a.to(v)
-    dist = a.dis(b)
+    dist = a.dist(b)
 
 if __name__ == "__main__":
     main()
