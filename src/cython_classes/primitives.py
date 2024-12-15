@@ -35,8 +35,8 @@ class Point3:
         dz = self.z - p.z
         return (dx**2 + dy**2 + dz**2) ** (1/2)
 
-    def __str__(p):
-        return f"({p.x}, {p.y}, {p.z})"
+    def __str__(self):
+        return f"({self.x}, {self.y}, {self.z})"
     
     @cython.cfunc
     def to(self, p: Point3) -> Vector3:
@@ -50,8 +50,15 @@ class Point3:
         return Vector3(p.x - self.x, p.y - self.y, p.z - self.z)
     
     @cython.cfunc
-    def translate(p, v: Vector3) -> Point3:
-        return Point3(p.x + v.x, p.y + v.y, p.z + v.z)
+    def translate(self, v: Vector3) -> Point3:
+        """
+        Retorna o ponto mais o vetor v
+
+        Argumentos:
+            - v (Vector3) Vetor de translação
+        """
+        assert isinstance(v, Vector3), "v precisa ser Vector3, mas é "+type(v)
+        return Point3(self.x + v.x, self.y + v.y, self.z + v.z)
     
 @cython.cclass
 class Vector3():
@@ -74,25 +81,25 @@ class Vector3():
 
     def __str__(self):
         return f"({self.x}, {self.y}, {self.z})"
-  
-    def __add__(p1, p2: Vector3) -> Vector3:
-        return Vector3(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z)
+    
+    def __add__(self, other):
+        return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(p1, p2: Vector3) -> Vector3:
-        return Vector3(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z)
-
-    def __mul__(p1, p2: Vector3) -> Vector3:
-        return (p1.x * p2.x) + (p1.y * p2.y) + (p1.z * p2.z)
+    def __sub__(self, other):
+        return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
+    
+    def __mul__(self, other) -> cython.double:
+        return (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
     
     @cython.cfunc
-    def scale(v, k: cython.double) -> cython.double:
+    def scale(self, k: cython.double) -> cython.double:
         """
         Retorna o produto do vetor pelo escalar k.
 
         Argumentos:
             - k (cython.double) escalar
         """
-        return Vector3(k*v.x, k*v.y, k*v.z)
+        return Vector3(k*self.x, k*self.y, k*self.z)
 
     @cython.cfunc
     def cross(self, other: Vector3) -> Vector3:
@@ -109,7 +116,7 @@ class Vector3():
         )
 
     @cython.cfunc
-    def norm(self):
+    def norm(self) -> cython.double:
         """
         Retorna a norma do vetor
         """
