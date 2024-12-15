@@ -94,3 +94,23 @@ class Vector3():
         """
         return Vector3(k*v.x, k*v.y, k*v.z)
 
+    @cython.cfunc
+    def cross(self, other: Vector3) -> Vector3:
+        """
+        Retorna o produto velorial deste vetor por outro
+
+        Argumentos:
+            - other (Vector3): outro vetor
+        """
+        return Vector3(
+            (self.y * other.z) - (self.z * other.y),
+            (self.z * other.x) - (self.x * other.z),
+            (self.x * other.y) - (self.y * other.x)
+        )
+
+    @cython.cfunc
+    def norm(self):
+        """
+        Retorna a norma do vetor
+        """
+        return (self * self)**(1/2)
