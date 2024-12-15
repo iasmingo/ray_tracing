@@ -1,6 +1,4 @@
 from __future__ import annotations
-import math
-
 
 class Point3:
     """
@@ -16,36 +14,41 @@ class Point3:
         self.y = y
         self.z = z
 
-    def dist(p1, p2) -> float:
-        assert isinstance(p1, Point3)
-        assert isinstance(p2, Point3)
-        dx = p1.x - p2.x
-        dy = p1.y - p2.y
-        dz = p1.z - p2.z
+    def dist(self, other) -> float:
+        """
+        Retorna a distância para outro ponto.
+
+        Argumentos:
+            - other (Point3) : outro ponto
+        """
+        assert isinstance(other, Point3), "other precisa ser Point3"
+        dx = self.x - other.x
+        dy = self.y - other.y
+        dz = self.z - other.z
         return (dx**2 + dy**2 + dz**2)**(1/2)
 
-    def __str__(p):
-        return f"({p.x}, {p.y}, {p.z})"
+    def __str__(self):
+        return f"({self.x}, {self.y}, {self.z})"
 
-    def to(self, p: Vector3) -> Vector3:
+    def to(self, p: Point3) -> Vector3:
         """
         Retorna o vetor até o ponto p.
 
         Argumentos:
             - p (Point3) : ponto de destino
         """
-        assert isinstance(p, Point3)
+        assert isinstance(p, Point3), "p precisa ser Point3, mas é "+type(p)
         return Vector3(p.x - self.x, p.y - self.y, p.z - self.z)
 
-    def translate(p, v: Vector3) -> Point3:
+    def translate(self, v: Vector3) -> Point3:
         """
         Retorna o ponto mais o vetor v
 
         Argumentos:
             - v (Vector3) Vetor de translação
         """
-        assert isinstance(v, Vector3)
-        return Point3(p.x + v.x, p.y + v.y, p.z + v.z)
+        assert isinstance(v, Vector3), "v precisa ser Vector3, mas é "+type(v)
+        return Point3(self.x + v.x, self.y + v.y, self.z + v.z)
     
 class Vector3:
     """
@@ -61,33 +64,42 @@ class Vector3:
         self.y = y
         self.z = z     
 
-    def __str__(p):
-        return f"({p.x}, {p.y}, {p.z})"
+    def __str__(self):
+        return f"({self.x}, {self.y}, {self.z})"
     
-    def __add__(p1, p2):
-        return Vector3(p1.x + p2.x, p1.y + p2.y, p1.z + p2.z)
+    def __add__(self, other):
+        return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
 
-    def __sub__(p1, p2):
-        return Vector3(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z)
+    def __sub__(self, other):
+        return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
     
-    def __mul__(p1, p2) -> float:
-        return (p1.x * p2.x) + (p1.y * p2.y) + (p1.z * p2.z)
+    def __mul__(self, other) -> float:
+        return (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
     
-    def scale(v, k: float) -> Vector3:
+    def scale(self, k: float) -> Vector3:
         """
         Retorna o produto do vetor pelo escalar k.
 
         Argumentos:
             - k (float) escalar
         """
-        return Vector3(k*v.x, k*v.y, k*v.z)
+        return Vector3(k*self.x, k*self.y, k*self.z)
     
-    def prod_vetorial(v1, v2):
+    def cross(self, other):
+        """
+        Retorna o produto velorial deste vetor por outro
+
+        Argumentos:
+            - other (Vector3): outro vetor
+        """
         return Vector3(
-            (v1.y * v2.z) - (v1.z * v2.y),
-            (v1.z * v2.x) - (v1.x * v2.z),
-            (v1.x * v2.y) - (v1.y * v2.x)
+            (self.y * other.z) - (self.z * other.y),
+            (self.z * other.x) - (self.x * other.z),
+            (self.x * other.y) - (self.y * other.x)
         )
     
-    def norma(v):
-        return math.sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z))
+    def norm(self):
+        """
+        Retorna a norma do vetor
+        """
+        return (self * self)**(1/2)
