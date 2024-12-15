@@ -85,7 +85,7 @@ class Vector3:
         """
         return Vector3(k*self.x, k*self.y, k*self.z)
     
-    def cross(self, other):
+    def cross(self, other: Vector3) -> Vector3:
         """
         Retorna o produto velorial deste vetor por outro
 
@@ -98,7 +98,7 @@ class Vector3:
             (self.x * other.y) - (self.y * other.x)
         )
     
-    def norm(self):
+    def norm(self) -> float:
         """
         Retorna a norma do vetor
         """
