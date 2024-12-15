@@ -14,8 +14,7 @@ class Point3:
         self.y = y
         self.z = z
 
-    @staticmethod
-    def dist(p1, p2):
+    def dist(p1, p2) -> float:
         assert isinstance(p1, Point3)
         assert isinstance(p2, Point3)
         dx = p1.x - p2.x
@@ -46,14 +45,14 @@ class Point3:
         assert isinstance(v, Vector3)
         return Point3(p.x + v.x, p.y + v.y, p.z + v.z)
     
-class Vector3():
+class Vector3:
     """
     Representa um vetor em um espaço tridimensional.
 
     Atributos:
-        x (float): Componente do vetor na direção X.
-        y (float): Componente do vetor na direção Y.
-        z (float): Componente do vetor na direção Z.
+        - x (float): Componente do vetor na direção X.
+        - y (float): Componente do vetor na direção Y.
+        - z (float): Componente do vetor na direção Z.
     """
     def __init__(self, x, y, z):
         self.x = x
@@ -69,7 +68,7 @@ class Vector3():
     def __sub__(p1, p2):
         return Vector3(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z)
     
-    def __mul__(p1, p2):
+    def __mul__(p1, p2) -> float:
         return (p1.x * p2.x) + (p1.y * p2.y) + (p1.z * p2.z)
     
     def scale(v, k: float) -> Vector3:

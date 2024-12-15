@@ -1,5 +1,4 @@
-from point import Point
-from ray_tracing.src.vector import Vector
+from python.primitives import Point3, Vector3
 from color_map import Colormap
 import os
 
@@ -7,10 +6,10 @@ class Face:
     def __init__(self):
         self.vertice_indices = [0, 0, 0]
         self.normal_indices = [0, 0, 0]
-        self.ka = Vector(0, 0, 0)
-        self.kd = Vector(0, 0, 0)
-        self.ks = Vector(0, 0, 0)
-        self.ke = Vector(0, 0, 0)
+        self.ka = Vector3(0, 0, 0)
+        self.kd = Vector3(0, 0, 0)
+        self.ks = Vector3(0, 0, 0)
+        self.ke = Vector3(0, 0, 0)
         self.ns = 0
         self.ni = 0
         self.d = 0
@@ -43,7 +42,7 @@ class ObjReader:
         self.vertices = []
         self.normals = []
         self.faces = []
-        self.faces_points = []
+        self.faces_point3s = []
         self.cur_material = None
         self.colormap = None
         self.read_file(file_path)
@@ -63,7 +62,7 @@ class ObjReader:
                     self.cur_material = self.colormap.get_material(material_name)
 
                 elif line.startswith('v '):
-                    self.vertices.append(Point(*map(float, line[2:].split())))
+                    self.vertices.append(Point3(*map(float, line[2:].split())))
 
                 elif line.startswith('vn '):
                     pass
@@ -82,16 +81,16 @@ class ObjReader:
                     self.faces.append(face)
 
             for face in self.faces:
-                face_points = []
+                face_point3s = []
                 for vertice_index in face.vertice_indices:
-                    face_points.append(self.vertices[vertice_index])
-                self.faces_points.append(face_points)
+                    face_point3s.append(self.vertices[vertice_index])
+                self.faces_point3s.append(face_point3s)
 
-    def get_faces_points(self):
+    def get_faces_point3s(self):
         ''' 
             Retorna uma lista com as coordenadas dos pontos das faces.
         '''
-        return self.faces_points
+        return self.faces_point3s
 
     def get_faces(self):
         ''' 
@@ -155,11 +154,11 @@ class ObjReader:
         '''
         return self.vertices
 
-    def print_faces_points(self):
-        for(enum, face) in enumerate(self.faces_points):
+    def print_faces_point3s(self):
+        for(enum, face) in enumerate(self.faces_point3s):
             print(f"Face {enum}:")
-            for point in face:
-                print(point)
+            for point3 in face:
+                print(point3)
             print()
 
     def print_faces(self):
