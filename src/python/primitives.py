@@ -1,4 +1,6 @@
 from __future__ import annotations
+import math
+
 
 class Point3:
     """
@@ -79,3 +81,13 @@ class Vector3:
             - k (float) escalar
         """
         return Vector3(k*v.x, k*v.y, k*v.z)
+    
+    def prod_vetorial(v1, v2):
+        return Vector3(
+            (v1.y * v2.z) - (v1.z * v2.y),
+            (v1.z * v2.x) - (v1.x * v2.z),
+            (v1.x * v2.y) - (v1.y * v2.x)
+        )
+    
+    def norma(v):
+        return math.sqrt((v.x * v.x) + (v.y * v.y) + (v.z * v.z))
