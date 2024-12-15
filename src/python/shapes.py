@@ -20,16 +20,30 @@ Color.BLUE = Color(0, 0, 1)
 Color.YELLOW = Color(1, 1, 0)
 
 class Plane(Intersectable):
+    """
+    Plano tridimensional
+
+    Atributos
+        - color (Color): cor
+        - normal (Point3): vetor normal ao plano
+        - position (Point3): ponto arbitrario que pertence ao plano
+    """
+
     def __init__(self, position: Point3, normal: Vector3, color: Color = Color.WHITE):
         self.color = color
         self.position = position
         self.normal = normal
 
 class Sphere(Intersectable):
+    """
+    Esfera
+
+    Atributos
+        - color (Color): cor
+        - position (Point3): centro da esfera
+        - radius (float): raio da esfera
+    """
     def __init__(self, position: Point3, radius: float, color: Color = Color.WHITE):
         self.color: Color = color
         self.position: Point3 = position
         self.radius: float = radius
-
-a = Sphere(Point3(0, 0, 0), 2)
-print(a)

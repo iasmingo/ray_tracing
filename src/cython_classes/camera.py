@@ -24,13 +24,10 @@ class Camera:
         - height (cython.int): altura da tela em pixels
         - width (cython.int): largura da tela em pixels
     """
-    declare(
-        d = double,
-        height = cint,
-        width = cint
-    )
-    position: Point3
-    target: Point3
+    
+    d: double
+    height: cint
+    width: cint
 
     def __init__(self, height: cint, width: cint, position: Point3, target: Point3 = None):
         self.position = position
@@ -55,6 +52,4 @@ class Camera:
         Executa uma tranformação de translação sobre a camera
         """
         self.position = self.position.translate(v)
-        self.target = self.target.translate(v)
-
-cam = Camera()
+        self.target = self.target.translate(v) 
