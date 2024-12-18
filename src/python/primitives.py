@@ -69,12 +69,18 @@ class Vector3:
     
     def __add__(self, other):
         return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
+    
+    def __neg__(self):
+        return Vector3(-self.x, -self.y, -self.z)
 
     def __sub__(self, other):
         return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
     
     def __mul__(self, other) -> float:
         return (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
+    
+    def __div__(self, k: float) -> Vector3:
+        return Vector3(self.x/k, self.y/k, self.z/k)
     
     def scale(self, k: float) -> Vector3:
         """
@@ -103,3 +109,13 @@ class Vector3:
         Retorna a norma do vetor
         """
         return (self * self)**(1/2)
+    
+    def normalized(self) -> float:
+        """
+        Retorna o vetor normalizado
+        """
+        return self.scale(1/self.norm())
+
+Vector3.i = Vector3(1, 0, 0)
+Vector3.j = Vector3(0, 1, 0)
+Vector3.k = Vector3(0, 0, 1)
