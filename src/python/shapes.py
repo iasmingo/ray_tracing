@@ -1,5 +1,6 @@
 from primitives import *
 
+
 class Intersectable:
     """
     Classe abstrata para superficies que podem ter interseções com raios da câmera
