@@ -53,12 +53,12 @@ def main():
     plano = Plane(Point3(0, 0, -5), Vector3(0, 0, 1), Color(0.8, 0.8, 0.2)) 
     objetos = [plano]
 
-    # Plane horizontal e plano vertical (chão e parede)
+    # Plano horizontal e plano vertical (chão e parede)
     plano_chao = Plane(Point3(0, -1, 0), Vector3(0, 1, 0), Color(0.5, 0.5, 0.5)) 
     plano_parede = Plane(Point3(0, 0, -5), Vector3(0, 0, 1), Color(0.8, 0.8, 0.2)) 
     objetos = [plano_chao, plano_parede]
 
-    # Plane inclinado
+    # Plano inclinado
     plano = Plane(Point3(0, -1, 0), Vector3(1, 1, 0).normalize(), Color(0.2, 0.6, 0.8)) 
     objetos = [plano]
 
