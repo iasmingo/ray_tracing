@@ -1,5 +1,6 @@
 from cython_classes.primitives import Vector3
 
+
 class Material:
     def __init__(self):
         self.ka = Vector3(0, 0, 0)
