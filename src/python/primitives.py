@@ -86,18 +86,14 @@ class Vector3:
             return self.x * other.x + self.y * other.y + self.z * other.z
         raise TypeError("Produto escalar requer outro Vector3")
     
-    def cross(self, other: Vector3) -> Vector3:
-        """
-        Retorna o produto velorial deste vetor por outro
-
-        Argumentos:
-            - other (Vector3): outro vetor
-        """
-        return Vector3(
-            (self.y * other.z) - (self.z * other.y),
-            (self.z * other.x) - (self.x * other.z),
-            (self.x * other.y) - (self.y * other.x)
-        )
+    def cross(self, other):
+        if isinstance(other, Vector3):
+            return Vector3(
+                self.y * other.z - self.z * other.y,
+                self.z * other.x - self.x * other.z,
+                self.x * other.y - self.y * other.x
+            )
+        raise TypeError("Produto vetorial requer outro Vector3")
     
     def magnitude(self):
         return (self.x ** 2 + self.y ** 2 + self.z ** 2)**(1/2)
