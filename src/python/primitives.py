@@ -30,38 +30,20 @@ class Point3:
         else:
             raise TypeError("Permitido subtrair apenas Point3 de Point3 ou Vector3 de Point3")
 
-    def dist(self, other) -> float:
-        """
-        Retorna a distância para outro ponto.
+    def dist(self, other):
+        if isinstance(other, Point3):
+            dx = self.x - other.x
+            dy = self.y - other.y
+            dz = self.z - other.z
+            return (dx**2 + dy**2 + dz**2)**(1/2)
+        else:
+            raise TypeError("Argumento deve ser outro Point3")
 
-        Argumentos:
-            - other (Point3) : outro ponto
-        """
-        assert isinstance(other, Point3), "other precisa ser Point3"
-        dx = self.x - other.x
-        dy = self.y - other.y
-        dz = self.z - other.z
-        return (dx**2 + dy**2 + dz**2)**(1/2)
-
-    def to(self, p: Point3) -> Vector3:
-        """
-        Retorna o vetor até o ponto p.
-
-        Argumentos:
-            - p (Point3) : ponto de destino
-        """
-        assert isinstance(p, Point3), "p precisa ser Point3, mas é "+type(p)
-        return Vector3(p.x - self.x, p.y - self.y, p.z - self.z)
-
-    def translate(self, v: Vector3) -> Point3:
-        """
-        Retorna o ponto mais o vetor v
-
-        Argumentos:
-            - v (Vector3) Vetor de translação
-        """
-        assert isinstance(v, Vector3), "v precisa ser Vector3, mas é "+type(v)
-        return Point3(self.x + v.x, self.y + v.y, self.z + v.z)
+    def to(self, other):
+        if isinstance(other, Point3):
+            return Vector3(p.x - self.x, p.y - self.y, p.z - self.z)
+        else:
+            raise TypeError("Argumento deve ser outro Point3")
     
 class Vector3:
     """
@@ -125,7 +107,3 @@ class Vector3:
         if mag == 0:
             raise ValueError("Não é possível normalizar um vetor nulo")
         return self / mag
-
-Vector3.i = Vector3(1, 0, 0)
-Vector3.j = Vector3(0, 1, 0)
-Vector3.k = Vector3(0, 0, 1)
