@@ -1,32 +1,33 @@
 from primitives import *
 from shapes import Color, Intersectable
 
+
 class Camera:
     def __init__(self, 
-                 posicao: Point3, 
-                 mira: Point3, 
-                 vetor_up: Vector3, 
-                 distancia_tela: float, 
-                 altura_resolucao: int, 
-                 largura_resolucao: int):
-        if vetor_up.magnitude() == 0:
-            raise ValueError("O vetor para cima (vetor_up) não pode ser nulo.")
+                 position: Point3, 
+                 target: Point3, 
+                 vector_up: Vector3, 
+                 dist_screen: float, 
+                 height_resolution: int, 
+                 width_resolution: int):
+        if vector_up.magnitude() == 0:
+            raise ValueError("O vetor para cima (vector_up) não pode ser nulo.")
 
-        self.posicao = posicao
-        self.mira = mira
-        self.vetor_up = vetor_up.normalize()
-        self.distancia_tela = distancia_tela
-        self.altura_resolucao = altura_resolucao
-        self.largura_resolucao = largura_resolucao
+        self.position = position
+        self.target = target
+        self.vector_up = vector_up.normalize()
+        self.dist_screen = dist_screen
+        self.height_resolution = height_resolution
+        self.width_resolution = width_resolution
 
         # Vetores ortonormais
-        self.w = (self.posicao - self.mira).normalize()
-        self.u = self.vetor_up.cross(self.w).normalize()
+        self.w = (self.position - self.target).normalize()
+        self.u = self.vector_up.cross(self.w).normalize()
         self.v = self.w.cross(self.u).normalize()
 
         # Dimensões dos pixels
-        self.tamanho_pixel_h = 1 / largura_resolucao
-        self.tamanho_pixel_v = 1 / altura_resolucao
+        self.pixel_size_h = 1 / width_resolution
+        self.pixel_size_v = 1 / height_resolution
 
     def __str__(self):
         return (
@@ -35,13 +36,6 @@ class Camera:
             f"  Target: {self.target}"
         )
 
-    def translate(self, v: Vector3) -> None:
-        """
-        Executa uma tranformação de translação sobre a camera
-        """
-        self.position = self.position.translate(v)
-        self.target = self.target.translate(v)
-
     def calculate_point_screen(self, i, j):
         """
         Calcula a posição do centro do pixel (i, j) na tela.
@@ -49,35 +43,35 @@ class Camera:
         j: coluna do pixel (0 é o pixel mais à esquerda)
         Retorna um ponto 3D na tela no espaço do mundo.
         """
-        if not (0 <= i < self.altura_resolucao and 0 <= j < self.largura_resolucao):
+        if not (0 <= i < self.height_resolution and 0 <= j < self.width_resolution):
             raise ValueError("Índices do pixel fora do intervalo da resolução da tela.")
 
         # Centro da tela no espaço do mundo
-        centro_tela = self.posicao - self.w * self.distancia_tela
+        screen_center = self.position - self.w * self.dist_screen
 
         # Vetor para o pixel na direção horizontal e vertical
-        delta_h = self.u * (j - (self.largura_resolucao - 1) / 2) * self.tamanho_pixel_h
-        delta_v = self.v * ((self.altura_resolucao - 1) / 2 - i) * self.tamanho_pixel_v
+        delta_h = self.u * (j - (self.width_resolution - 1) / 2) * self.pixel_size_h
+        delta_v = self.v * ((self.height_resolution - 1) / 2 - i) * self.pixel_size_v
 
-        return centro_tela + delta_h + delta_v
+        return screen_center + delta_h + delta_v
 
 
     def draw(self, objects):
-        width = self.largura_resolucao
-        height = self.altura_resolucao
+        width = self.width_resolution
+        height = self.height_resolution
 
         image = [[(0, 0, 0) for _ in range(width)] for _ in range(height)]
 
         for i in range(height):
             for j in range(width):
                 pixel_pos = self.calculate_point_screen(i, j)
-                direction = (pixel_pos - self.posicao).normalize()
+                direction = (pixel_pos - self.position).normalize()
 
                 pixel_color: Color = Color.BLACK
                 min_dist = float('inf')
 
                 for obj in objects:
-                    distance = obj.intersects(self.posicao, direction)
+                    distance = obj.intersects(self.position, direction)
 
                     if distance is not None and distance < min_dist:
                         min_dist = distance
