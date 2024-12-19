@@ -16,11 +16,11 @@ def main():
     camera = Camera(camera_pos, camera_mira, camera_up, distancia_tela, altura_resolucao, largura_resolucao)
 
     # Configuração dos objetos
-    sphere1 = Sphere(Point3(0, 0, -3), 1, Color.RED)  # Sphere vermelha
-    sphere2 = Sphere(Point3(2, 0, -4), 1, Color.GREEN)  # Sphere verde
-    plane = Plane(Point3(0, -1, 0), Vector3(0, 1, 0), Color(0.5, 0.5, 0.5))  # Plane cinza
+    esfera1 = Sphere(Point3(0, 0, -3), 1, Color.RED) 
+    esfera2 = Sphere(Point3(2, 0, -4), 1, Color.GREEN)  
+    plano = Plane(Point3(0, -1, 0), Vector3(0, 1, 0), Color(0.5, 0.5, 0.5)) 
 
-    objetos = [sphere1, sphere2, plane]
+    objetos = [esfera1, esfera2, plano]
 
     # Renderizar a cena
     imagem = camera.draw(objetos)
@@ -28,7 +28,7 @@ def main():
     # Salvar a imagem
     plt.imshow(imagem)
     plt.axis('off')
-    plt.savefig("render.png", bbox_inches='tight')
+    plt.savefig("image.png", bbox_inches='tight')
     plt.show()
 
 if __name__ == "__main__":
