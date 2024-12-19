@@ -28,29 +28,31 @@ class Plane(Intersectable):
     Plano tridimensional
 
     Atributos
-        - color (Color): cor
+        - color (Color): color
         - normal (Point3): vetor normal ao plano
-        - position (Point3): ponto arbitrario que pertence ao plano
+        - position (Point3): point arbitrario que pertence ao plano
     """
 
-    def __init__(self, position: Point3, normal: Vector3, color: Color = Color.WHITE):
+    def __init__(self, point: Point3, normal: Vector3, color: tuple):
+        if normal.magnitude() == 0:
+            raise ValueError("O vetor normal ao plano não pode ser nulo.")
+        self.point = point
+        self.normal = normal.normalize()
         self.color = color
-        self.position = position
-        self.normal = normal
 
     def intersects(self, origin, direction):
         """
-        Calcula a interseção do raio com o plano.
-        origem: Ponto de origem do raio
-        direcao: Vetor direção do raio (normalizado)
+        Calcula a interseção do radius com o plano.
+        origem: Ponto de origem do radius
+        direcao: Vetor direção do radius (normalizado)
         Retorna a distância positiva ou None se não houver interseção.
         """
-        denominator = self.normal * direction
+        denominator = self.normal.dot(direction)
 
         if abs(denominator) < 1e-6:
             return None
 
-        t = (origin.to(self.position) * self.normal) / denominator
+        t = (self.point - origin).dot(self.normal) / denominator
         return t if t >= 0 else None
 
 class Sphere(Intersectable):
@@ -58,25 +60,27 @@ class Sphere(Intersectable):
     Esfera
 
     Atributos
-        - color (Color): cor
-        - position (Point3): centro da esfera
-        - radius (float): raio da esfera
+        - color (Color): color
+        - position (Point3): centro_tela da esfera
+        - radius (float): radius da esfera
     """
-    def __init__(self, position: Point3, radius: float, color: Color = Color.WHITE):
-        self.color: Color = color
-        self.position: Point3 = position
-        self.radius: float = radius
+    def __init__(self, centro_tela: Point3, radius: float, color: tuple):
+        if radius <= 0:
+            raise ValueError("O radius deve ser positivo e maior que zero.")
+        self.centro_tela = centro_tela
+        self.radius = radius
+        self.color = color
 
     def intersects(self, origin: Point3, direction: Vector3):
         """
-        Calcula a interseção do raio com a esfera.
-        origin: Ponto de origem do raio
-        direction: Vetor direção do raio (normalizado)
+        Calcula a interseção do radius com a esfera.
+        origin: Ponto de origem do radius
+        direction: Vetor direção do radius (normalizado)
         Retorna a menor distância positiva ou None se não houver interseção.
         """
-        L = origin.to(self.position)
-        tca = L * direction
-        d2 = (L * L) - tca * tca
+        L = self.centro_tela - origin
+        tca = L.dot(direction)
+        d2 = L.dot(L) - tca * tca
         r2 = self.radius * self.radius
 
         if d2 > r2:

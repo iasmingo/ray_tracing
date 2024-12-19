@@ -8,11 +8,12 @@ def main():
     # Configuração da câmera
     camera_pos = Point3(0, 0, 0)
     camera_mira = Point3(0, 0, -1)
+    camera_up = Vector3(0, 1, 0)
     distancia_tela = 1.0
     altura_resolucao = 500
     largura_resolucao = 500
 
-    camera = Camera(altura_resolucao, largura_resolucao, distancia_tela, camera_pos, camera_mira)
+    camera = Camera(camera_pos, camera_mira, camera_up, distancia_tela, altura_resolucao, largura_resolucao)
 
     # Configuração dos objetos
     sphere1 = Sphere(Point3(0, 0, -3), 1, Color.RED)  # Sphere vermelha

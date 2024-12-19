@@ -14,6 +14,22 @@ class Point3:
         self.y = y
         self.z = z
 
+    def __str__(self):
+        return f"({self.x}, {self.y}, {self.z})"
+
+    def __add__(self, other):
+        if isinstance(other, Vector3):
+            return Point3(self.x + other.x, self.y + other.y, self.z + other.z)
+        raise TypeError("Permitido somar apenas Point3 a Vector3")
+
+    def __sub__(self, other):
+        if isinstance(other, Point3):
+            return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
+        elif isinstance(other, Vector3):
+            return Point3(self.x - other.x, self.y - other.y, self.z - other.z)
+        else:
+            raise TypeError("Permitido subtrair apenas Point3 de Point3 ou Vector3 de Point3")
+
     def dist(self, other) -> float:
         """
         Retorna a distância para outro ponto.
@@ -26,9 +42,6 @@ class Point3:
         dy = self.y - other.y
         dz = self.z - other.z
         return (dx**2 + dy**2 + dz**2)**(1/2)
-
-    def __str__(self):
-        return f"({self.x}, {self.y}, {self.z})"
 
     def to(self, p: Point3) -> Vector3:
         """
@@ -69,27 +82,27 @@ class Vector3:
     
     def __add__(self, other):
         return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
-    
-    def __neg__(self):
-        return Vector3(-self.x, -self.y, -self.z)
 
     def __sub__(self, other):
         return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
-    
-    def __mul__(self, other) -> float:
-        return (self.x * other.x) + (self.y * other.y) + (self.z * other.z)
-    
-    def __div__(self, k: float) -> Vector3:
-        return Vector3(self.x/k, self.y/k, self.z/k)
-    
-    def scale(self, k: float) -> Vector3:
-        """
-        Retorna o produto do vetor pelo escalar k.
 
-        Argumentos:
-            - k (float) escalar
-        """
-        return Vector3(k*self.x, k*self.y, k*self.z)
+    def __neg__(self):
+        return Vector3(-self.x, -self.y, -self.z)
+    
+    def __mul__(self, escalar):
+        if isinstance(escalar, (int, float)):
+            return Vector3(self.x * escalar, self.y * escalar, self.z * escalar)
+        raise TypeError("Multiplicação apenas com um escalar")
+
+    def __truediv__(self, escalar):
+        if isinstance(escalar, (int, float)) and escalar != 0:
+            return Vector3(self.x / escalar, self.y / escalar, self.z / escalar)
+        raise ValueError("Divisão apenas por um escalar não nulo")
+    
+    def dot(self, other):
+        if isinstance(other, Vector3):
+            return self.x * other.x + self.y * other.y + self.z * other.z
+        raise TypeError("Produto escalar requer outro Vector3")
     
     def cross(self, other: Vector3) -> Vector3:
         """
@@ -104,17 +117,14 @@ class Vector3:
             (self.x * other.y) - (self.y * other.x)
         )
     
-    def norm(self) -> float:
-        """
-        Retorna a norma do vetor
-        """
-        return (self * self)**(1/2)
-    
-    def normalized(self) -> float:
-        """
-        Retorna o vetor normalizado
-        """
-        return self.scale(1/self.norm())
+    def magnitude(self):
+        return (self.x ** 2 + self.y ** 2 + self.z ** 2)**(1/2)
+
+    def normalize(self):
+        mag = self.magnitude()
+        if mag == 0:
+            raise ValueError("Não é possível normalizar um vetor nulo")
+        return self / mag
 
 Vector3.i = Vector3(1, 0, 0)
 Vector3.j = Vector3(0, 1, 0)
