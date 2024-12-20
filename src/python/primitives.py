@@ -38,12 +38,6 @@ class Point3:
             return (dx**2 + dy**2 + dz**2)**(1/2)
         else:
             raise TypeError("Argumento deve ser outro Point3")
-
-    def to(self, other):
-        if isinstance(other, Point3):
-            return Vector3(p.x - self.x, p.y - self.y, p.z - self.z)
-        else:
-            raise TypeError("Argumento deve ser outro Point3")
     
 class Vector3:
     """
@@ -63,10 +57,18 @@ class Vector3:
         return f"({self.x}, {self.y}, {self.z})"
     
     def __add__(self, other):
-        return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
+        if isinstance(other, Vector3):
+            return Vector3(self.x + other.x, self.y + other.y, self.z + other.z) 
+        elif isinstance(other, Point3):
+            return Point3(self.x + other.x, self.y + other.y, self.z + other.z)
+        raise TypeError("Adição inválida")
 
     def __sub__(self, other):
-        return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
+        if isinstance(other, Vector3):
+            return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
+        elif isinstance(other, Point3):
+            return Point3(self.x - other.x, self.y - other.y, self.z - other.z)
+        raise TypeError("Subtração inválida")
 
     def __neg__(self):
         return Vector3(-self.x, -self.y, -self.z)
