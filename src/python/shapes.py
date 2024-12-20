@@ -65,10 +65,10 @@ class Sphere(Intersectable):
         - position (Point3): centro_tela da esfera
         - radius (float): radius da esfera
     """
-    def __init__(self, centro_tela: Point3, radius: float, color: tuple):
+    def __init__(self, centro_esfera: Point3, radius: float, color: tuple):
         if radius <= 0:
             raise ValueError("O radius deve ser positivo e maior que zero.")
-        self.centro_tela = centro_tela
+        self.centro_esfera = centro_esfera
         self.radius = radius
         self.color = color
 
@@ -79,7 +79,7 @@ class Sphere(Intersectable):
         direction: Vetor direção do radius (normalizado)
         Retorna a menor distância positiva ou None se não houver interseção.
         """
-        L = self.centro_tela - origin
+        L = self.centro_esfera - origin
         tca = L.dot(direction)
         d2 = L.dot(L) - tca * tca
         r2 = self.radius * self.radius
