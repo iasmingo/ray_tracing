@@ -43,18 +43,20 @@ class Plane(Intersectable):
 
     def intersects(self, origin, direction):
         """
-        Calcula a interseção do radius com o plano.
-        origem: Ponto de origem do radius
-        direcao: Vetor direção do radius (normalizado)
+        Calcula a interseção do raio com o plano.
+        origem: Ponto de origem do raio
+        direcao: Vetor direção do raio (normalizado)
         Retorna a distância positiva ou None se não houver interseção.
         """
-        denominator = self.normal.dot(direction)
+        denominator = self.normal.dot(direction) # o denominador é o seno do angulo do raio com o plano
 
-        if abs(denominator) < 1e-6:
+        if abs(denominator) < 1e-6: # reta paralela ao plano
             return None
-
+        
+        # hipotenusa (distancia da interseção) = cateto oposto / seno
         t = (self.point - origin).dot(self.normal) / denominator
-        return t if t >= 0 else None
+
+        return t if t >= 0 else None # hipotenusa 'negativa' implica que o raio esta se afastando do plano
 
 class Sphere(Intersectable):
     """
@@ -74,24 +76,24 @@ class Sphere(Intersectable):
 
     def intersects(self, origin: Point3, direction: Vector3):
         """
-        Calcula a interseção do radius com a esfera.
-        origin: Ponto de origem do radius
-        direction: Vetor direção do radius (normalizado)
+        Calcula a interseção do raio com a esfera.
+        origin: Ponto de origem do raio
+        direction: Vetor direção do raio (normalizado)
         Retorna a menor distância positiva ou None se não houver interseção.
         """
-        L = self.centro_esfera - origin
-        tca = L.dot(direction)
-        d2 = L.dot(L) - tca * tca
-        r2 = self.radius * self.radius
+        distance = self.centro_esfera - origin # vetor distancia da origem pro centro da esfera
+        proj_length = distance.dot(direction) # projeção de distance sob o raio
+        square_d = distance.dot(distance) - proj_length**2 # distância do ponto mais próximo ao quadrado
+        square_radius = self.radius **2 # raio da esfera ao quadrado
 
-        if d2 > r2:
+        if proj_length < 0: # caso o sentido é oposto, não há interseção
+            return None
+
+        if square_d > square_radius: # se a distancia do ponto mais próximo é maior que o raio, não há interseção
             return None
         
-        thc = (r2 - d2) ** (1/2)
-        t0 = tca - thc
-        t1 = tca + thc
+        thc = (square_radius - square_d) ** (1/2)
+        inter_1 = proj_length - thc
+        inter_2 = proj_length + thc
 
-        if t0 < 0 and t1 < 0:
-            return None
-
-        return t0 if t0 > 0 else t1
+        return inter_1 if inter_1 > 0 else inter_2
