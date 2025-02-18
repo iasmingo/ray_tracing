@@ -97,3 +97,58 @@ class Sphere(Intersectable):
         inter_2 = proj_length + thc
 
         return inter_1 if inter_1 > 0 else inter_2
+    
+class TriangleMesh(Intersectable):
+    def __init__(self, n_triang, n_vert, lista_vert, lista_triang, lista_normais, normais_vert, cor):
+        self.n_triang = n_triang
+        self.n_vert = n_vert
+        self.lista_vert = lista_vert
+        self.triangs = lista_triang
+        self.lista_triang = []
+        for i in range(0, len(lista_triang)):
+            plano = Plane(lista_vert[lista_triang[i][0]], lista_normais[i], cor)
+            self.lista_triang.append(plano)
+        self.lista_normais = lista_normais
+        self.normais_vert = normais_vert
+        self.color = cor
+
+    def intersects(self, origin: Point3, direction: Vector3):
+        for i in range(0, len(self.lista_triang)):
+            dist = self.lista_triang[i].intersects(origin, direction)
+            if(dist == None):
+                return None
+            else:
+                # checar se está dentro do plano
+                # precisa primeiro achar o ponto
+                # pra isso usa a origem e a direção para fazer
+                # uma equação paramétrica da reta
+                # e colocar t como a distância do ponto origin
+                x = (direction.x * dist) + origin.x
+                y = (direction.y * dist) + origin.y
+                z = (direction.z * dist) + origin.z
+                p = Point3(x, y, z)
+                # https://www.youtube.com/watch?v=3MJ-k15te_k
+                ba = self.lista_vert[self.triangs[i][1]] - self.lista_vert[self.triangs[i][0]]
+                ca = self.lista_vert[self.triangs[i][2]] - self.lista_vert[self.triangs[i][0]] 
+                bc = self.lista_vert[self.triangs[i][2]] - self.lista_vert[self.triangs[i][1]]
+                s = (ba.magnitude() + ca.magnitude() + bc.magnitude())/2
+                areatotal = (s * (s - ba.magnitude()) * (s - ca.magnitude()) * (s - bc.magnitude())) ** 0.5
+                # https://mundoeducacao.uol.com.br/matematica/formula-heron.htm
+                bp = self.lista_vert[self.triangs[i][1]] - p
+                cp = self.lista_vert[self.triangs[i][2]] - p
+                ap = self.lista_vert[self.triangs[i][0]] - p
+
+
+                s1 = (bp.magnitude() + cp.magnitude() + bc.magnitude())/2
+                area1 = (s1 * (s1 - bp.magnitude()) * (s1 - cp.magnitude()) * (s1 - bc.magnitude())) ** 0.5
+                
+                s2 = (bp.magnitude() + ap.magnitude() + ba.magnitude())/2
+                area2 = (s2 * (s2 - bp.magnitude()) * (s2 - ap.magnitude()) * (s2 - ba.magnitude())) ** 0.5
+                
+                s3 = (ap.magnitude() + cp.magnitude() + ca.magnitude())/2
+                area3 = (s3 * (s3 - ap.magnitude()) * (s3 - cp.magnitude()) * (s3 - ca.magnitude())) ** 0.5
+
+                if((area1 + area2 + area3) == areatotal):
+                    return dist
+                else:
+                    return None

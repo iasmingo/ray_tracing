@@ -75,7 +75,8 @@ class Camera:
 
                     if distance is not None and distance < min_dist:
                         min_dist = distance
-                        pixel_color = obj.color
+                        pixel_color = obj.color 
+                    
 
                 image[i][j] = (pixel_color.r, pixel_color.g, pixel_color.b)
 
