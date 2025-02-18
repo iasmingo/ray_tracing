@@ -58,6 +58,7 @@ class Camera:
 
     def draw(self, objects):
         width = self.width_resolution
+        debug = 0
         height = self.height_resolution
 
         image = [[(0, 0, 0) for _ in range(width)] for _ in range(height)]
@@ -76,8 +77,11 @@ class Camera:
                     if distance is not None and distance < min_dist:
                         min_dist = distance
                         pixel_color = obj.color 
+                        debug += 1
                     
 
                 image[i][j] = (pixel_color.r, pixel_color.g, pixel_color.b)
 
+        print(debug)
+        print(len(image[0]) * len(image))
         return image
