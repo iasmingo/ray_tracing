@@ -113,10 +113,12 @@ class TriangleMesh(Intersectable):
         self.color = cor
 
     def intersects(self, origin: Point3, direction: Vector3):
+        found = False
+        mindist = float('inf')
         for i in range(0, len(self.lista_triang)):
             dist = self.lista_triang[i].intersects(origin, direction)
             if(dist == None):
-                return None
+                continue
             else:
                 # checar se está dentro do plano
                 # precisa primeiro achar o ponto
@@ -148,7 +150,11 @@ class TriangleMesh(Intersectable):
                 s3 = (ap.magnitude() + cp.magnitude() + ca.magnitude())/2
                 area3 = (s3 * (s3 - ap.magnitude()) * (s3 - cp.magnitude()) * (s3 - ca.magnitude())) ** 0.5
 
-                if((area1 + area2 + area3) == areatotal):
-                    return dist
-                else:
-                    return None
+                if(abs((area1 + area2 + area3) - areatotal) < 0.000001):
+                    mindist = min(dist, mindist)
+                    found = True
+        
+        if(found):
+            return mindist
+        else:
+            return None

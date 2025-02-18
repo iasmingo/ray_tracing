@@ -17,7 +17,7 @@ def main():
 
     #Cena inicial
     # esfera1 = Sphere(Point3(0, 0, -3), 1, Color.RED) 
-    # esfera2 = Sphere(Point3(2, 0, -4), 1, Color.GREEN)  
+    esfera2 = Sphere(Point3(2, 0, -4), 1, Color.GREEN)  
     plano = Plane(Point3(0, -1, 0), Vector3(0, 1, 0), Color(0.5, 0.5, 0.5)) 
 
     # objetos = [esfera1, esfera2, plano]
