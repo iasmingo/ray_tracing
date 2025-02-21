@@ -138,42 +138,46 @@ class TriangleMesh(Intersectable):
     def intersects(self, origin: Point3, direction: Vector3):
         found = False
         mindist = float('inf')
+
+        # Verifica se o raio intercepta o plano de cada triângulo da malha
         for i in range(0, len(self.t_list_planes)):
             dist = self.t_list_planes[i].intersects(origin, direction)
             if(dist == None):
                 continue
             else:
-                # checar se está dentro do plane
-                # precisa primeiro achar o ponto
-                # pra isso usa a origem e a direção para fazer
-                # uma equação paramétrica da reta
-                # e colocar t como a distância do ponto origin
+                ## Checa se o ponto de impacto está dentro do triângulo
+
+                # Encontra o ponto de impacto usando a equação paramétrica da reta
                 x = (direction.x * dist) + origin.x
                 y = (direction.y * dist) + origin.y
                 z = (direction.z * dist) + origin.z
                 p = Point3(x, y, z)
-                # https://www.youtube.com/watch?v=3MJ-k15te_k
+
+                # Vetores das arestas do triângulo
                 ba = self.v_list[self.t_list[i][1]] - self.v_list[self.t_list[i][0]]
                 ca = self.v_list[self.t_list[i][2]] - self.v_list[self.t_list[i][0]] 
                 bc = self.v_list[self.t_list[i][2]] - self.v_list[self.t_list[i][1]]
+
+                # Semiperímetro e área do triângulo
                 s = (ba.magnitude() + ca.magnitude() + bc.magnitude())/2
-                areatotal = (s * (s - ba.magnitude()) * (s - ca.magnitude()) * (s - bc.magnitude())) ** 0.5
-                # https://mundoeducacao.uol.com.br/matematica/formula-heron.htm
+                area_t = (s * (s - ba.magnitude()) * (s - ca.magnitude()) * (s - bc.magnitude())) ** 0.5
+                
+                # Vetores do ponto de interseção para os vértices do triângulo 
                 bp = self.v_list[self.t_list[i][1]] - p
                 cp = self.v_list[self.t_list[i][2]] - p
                 ap = self.v_list[self.t_list[i][0]] - p
 
-
+                # Semiperímetros dos triângulos menores formados por p e o vértice do triângulo original
                 s1 = (bp.magnitude() + cp.magnitude() + bc.magnitude())/2
-                area1 = (s1 * (s1 - bp.magnitude()) * (s1 - cp.magnitude()) * (s1 - bc.magnitude())) ** 0.5
-                
                 s2 = (bp.magnitude() + ap.magnitude() + ba.magnitude())/2
-                area2 = (s2 * (s2 - bp.magnitude()) * (s2 - ap.magnitude()) * (s2 - ba.magnitude())) ** 0.5
-                
                 s3 = (ap.magnitude() + cp.magnitude() + ca.magnitude())/2
+                
+                # Áreas dos triângulos menores formados
+                area1 = (s1 * (s1 - bp.magnitude()) * (s1 - cp.magnitude()) * (s1 - bc.magnitude())) ** 0.5
+                area2 = (s2 * (s2 - bp.magnitude()) * (s2 - ap.magnitude()) * (s2 - ba.magnitude())) ** 0.5
                 area3 = (s3 * (s3 - ap.magnitude()) * (s3 - cp.magnitude()) * (s3 - ca.magnitude())) ** 0.5
 
-                if(abs((area1 + area2 + area3) - areatotal) < 0.000001):
+                if(abs((area1 + area2 + area3) - area_t) < 0.000001):
                     mindist = min(dist, mindist)
                     found = True
         
