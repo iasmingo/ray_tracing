@@ -3,10 +3,10 @@ from primitives import *
 
 class Intersectable:
     """
-    Classe abstrata para superficies que podem ter interseções com raios da câmera
+    Classe abstrata para superfícies que podem ter interseções com raios da câmera.
     """
     def __init__(self):
-        raise Exception("Você não pode instanciar essa classe")
+        raise Exception("Esta classe não é instanciável")
     
     def intersects():
         pass
@@ -28,12 +28,11 @@ class Plane(Intersectable):
     """
     Plano tridimensional
 
-    Atributos
-        - color (Color): color
-        - normal (Point3): vetor normal ao plano
-        - position (Point3): point arbitrario que pertence ao plano
+    Atributos:
+        - point (Point3): ponto arbitrário pertencente ao plano
+        - normal (Vector3): vetor normal ao plano
+        - color (Color): cor do plano
     """
-
     def __init__(self, point: Point3, normal: Vector3, color: tuple):
         if normal.magnitude() == 0:
             raise ValueError("O vetor normal ao plano não pode ser nulo.")
@@ -44,33 +43,36 @@ class Plane(Intersectable):
     def intersects(self, origin, direction):
         """
         Calcula a interseção do raio com o plano.
-        origem: Ponto de origem do raio
-        direcao: Vetor direção do raio (normalizado)
+        origin: ponto de origem do raio
+        direction: vetor direção do raio (normalizado)
         Retorna a distância positiva ou None se não houver interseção.
         """
-        denominator = self.normal.dot(direction) # o denominador é o seno do angulo do raio com o plano
+        # Seno do ângulo do raio com o plano
+        denominator = self.normal.dot(direction)
 
-        if abs(denominator) < 1e-6: # reta paralela ao plano
+        # Reta paralela ao plano
+        if abs(denominator) < 1e-6:
             return None
         
-        # hipotenusa (distancia da interseção) = cateto oposto / seno
+        # Hipotenusa (distância da interseção) = cateto oposto / seno
         t = (self.point - origin).dot(self.normal) / denominator
 
-        return t if t >= 0 else None # hipotenusa 'negativa' implica que o raio esta se afastando do plano
+        # Hipotenusa "negativa": raio está se afastando do plano
+        return t if t >= 0 else None
 
 class Sphere(Intersectable):
     """
     Esfera
 
-    Atributos
+    Atributos:
         - color (Color): color
         - position (Point3): centro_tela da esfera
         - radius (float): radius da esfera
     """
-    def __init__(self, centro_esfera: Point3, radius: float, color: tuple):
+    def __init__(self, center: Point3, radius: float, color: tuple):
         if radius <= 0:
             raise ValueError("O radius deve ser positivo e maior que zero.")
-        self.centro_esfera = centro_esfera
+        self.center = center
         self.radius = radius
         self.color = color
 
@@ -81,15 +83,24 @@ class Sphere(Intersectable):
         direction: Vetor direção do raio (normalizado)
         Retorna a menor distância positiva ou None se não houver interseção.
         """
-        distance = self.centro_esfera - origin # vetor distancia da origem pro centro da esfera
-        proj_length = distance.dot(direction) # projeção de distance sob o raio
-        square_d = distance.dot(distance) - proj_length**2 # distância do ponto mais próximo ao quadrado
-        square_radius = self.radius **2 # raio da esfera ao quadrado
+        # Vetor distância da origem para o centro da esfera
+        distance = self.center - origin
 
-        if proj_length < 0: # caso o sentido é oposto, não há interseção
+        # Projeção de distance sobre o raio
+        proj_length = distance.dot(direction)
+
+        # Distância do ponto mais próximo ao quadrado
+        square_d = distance.dot(distance) - proj_length**2
+
+        # Raio da esfera ao quadrado
+        square_radius = self.radius**2 
+
+        # Caso o sentido seja oposto, não há interseção
+        if proj_length < 0:
             return None
 
-        if square_d > square_radius: # se a distancia do ponto mais próximo é maior que o raio, não há interseção
+        # Caso a distância do ponto mais próximo seja maior que o raio, não há interseção
+        if square_d > square_radius:
             return None
         
         thc = (square_radius - square_d) ** (1/2)
