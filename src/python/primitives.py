@@ -3,12 +3,12 @@ from __future__ import annotations
 
 class Point3:
     """
-    Representa um ponto em um espaço tridimensional.
+    Ponto tridimensional
 
     Atributos:
-        x (float): Coordenada X do ponto.
-        y (float): Coordenada Y do ponto.
-        z (float): Coordenada Z do ponto.
+        x (float): Coordenada X do ponto
+        y (float): Coordenada Y do ponto
+        z (float): Coordenada Z do ponto
     """
     def __init__(self, x, y, z):
         self.x = x
@@ -42,12 +42,12 @@ class Point3:
     
 class Vector3:
     """
-    Representa um vetor em um espaço tridimensional.
+    Vetor tridimensional
 
     Atributos:
-        - x (float): Componente do vetor na direção X.
-        - y (float): Componente do vetor na direção Y.
-        - z (float): Componente do vetor na direção Z.
+        - x (float): Componente X do vetor
+        - y (float): Componente Y do vetor
+        - z (float): Componente Z do vetor
     """
     def __init__(self, x, y, z):
         self.x = x
