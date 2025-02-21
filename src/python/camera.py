@@ -10,6 +10,7 @@ class Camera:
                  dist_screen: float, 
                  height_resolution: int, 
                  width_resolution: int):
+
         if vector_up.magnitude() == 0:
             raise ValueError("O vetor para cima (vector_up) não pode ser nulo.")
 
@@ -54,7 +55,6 @@ class Camera:
         delta_v = self.v * ((self.height_resolution - 1) / 2 - i) * self.pixel_size_v
 
         return screen_center + delta_h + delta_v
-
 
     def draw(self, objects):
         width = self.width_resolution
