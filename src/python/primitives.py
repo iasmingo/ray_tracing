@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 class Point3:
     """
     Representa um ponto em um espaço tridimensional.
@@ -20,7 +21,7 @@ class Point3:
     def __add__(self, other):
         if isinstance(other, Vector3):
             return Point3(self.x + other.x, self.y + other.y, self.z + other.z)
-        raise TypeError("Permitido somar apenas Point3 a Vector3")
+        raise TypeError("Adição requer um Vector3")
 
     def __sub__(self, other):
         if isinstance(other, Point3):
@@ -28,7 +29,7 @@ class Point3:
         elif isinstance(other, Vector3):
             return Point3(self.x - other.x, self.y - other.y, self.z - other.z)
         else:
-            raise TypeError("Permitido subtrair apenas Point3 de Point3 ou Vector3 de Point3")
+            raise TypeError("Subtração requer um Point3 ou Vector3")
 
     def dist(self, other):
         if isinstance(other, Point3):
@@ -37,7 +38,7 @@ class Point3:
             dz = self.z - other.z
             return (dx**2 + dy**2 + dz**2)**(1/2)
         else:
-            raise TypeError("Argumento deve ser outro Point3")
+            raise TypeError("Cálculo da distância requer um Point3")
     
 class Vector3:
     """
@@ -61,14 +62,14 @@ class Vector3:
             return Vector3(self.x + other.x, self.y + other.y, self.z + other.z) 
         elif isinstance(other, Point3):
             return Point3(self.x + other.x, self.y + other.y, self.z + other.z)
-        raise TypeError("Adição inválida")
+        raise TypeError("Adição requer um Point3 ou Vector3")
 
     def __sub__(self, other):
         if isinstance(other, Vector3):
             return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
         elif isinstance(other, Point3):
             return Point3(self.x - other.x, self.y - other.y, self.z - other.z)
-        raise TypeError("Subtração inválida")
+        raise TypeError("Subtração requer um Point3 ou Vector3")
 
     def __neg__(self):
         return Vector3(-self.x, -self.y, -self.z)
@@ -76,17 +77,17 @@ class Vector3:
     def __mul__(self, escalar):
         if isinstance(escalar, (int, float)):
             return Vector3(self.x * escalar, self.y * escalar, self.z * escalar)
-        raise TypeError("Multiplicação apenas com um escalar")
+        raise TypeError("Multiplicação requer um escalar")
 
     def __truediv__(self, escalar):
         if isinstance(escalar, (int, float)) and escalar != 0:
             return Vector3(self.x / escalar, self.y / escalar, self.z / escalar)
-        raise ValueError("Divisão apenas por um escalar não nulo")
+        raise ValueError("Divisão requer um escalar não nulo")
     
     def dot(self, other):
         if isinstance(other, Vector3):
             return self.x * other.x + self.y * other.y + self.z * other.z
-        raise TypeError("Produto escalar requer outro Vector3")
+        raise TypeError("Produto escalar requer um Vector3")
     
     def cross(self, other):
         if isinstance(other, Vector3):
@@ -95,7 +96,7 @@ class Vector3:
                 self.z * other.x - self.x * other.z,
                 self.x * other.y - self.y * other.x
             )
-        raise TypeError("Produto vetorial requer outro Vector3")
+        raise TypeError("Produto vetorial requer um Vector3")
     
     def magnitude(self):
         return (self.x ** 2 + self.y ** 2 + self.z ** 2)**(1/2)
