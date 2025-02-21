@@ -43,8 +43,8 @@ class Plane(Intersectable):
     def intersects(self, origin, direction):
         """
         Calcula a interseção do raio com o plano.
-        origin: ponto de origem do raio
-        direction: vetor direção do raio (normalizado)
+        origin (Point3): ponto de origem do raio
+        direction (Vector3): vetor direção do raio (normalizado)
         Retorna a distância positiva ou None se não houver interseção.
         """
         # Seno do ângulo do raio com o plano
@@ -65,9 +65,9 @@ class Sphere(Intersectable):
     Esfera
 
     Atributos:
-        - color (Color): color
-        - position (Point3): centro_tela da esfera
-        - radius (float): radius da esfera
+        - center (Point3): centro da esfera
+        - radius (float): raio da esfera
+        - color (Color): cor
     """
     def __init__(self, center: Point3, radius: float, color: tuple):
         if radius <= 0:
@@ -79,8 +79,8 @@ class Sphere(Intersectable):
     def intersects(self, origin: Point3, direction: Vector3):
         """
         Calcula a interseção do raio com a esfera.
-        origin: Ponto de origem do raio
-        direction: Vetor direção do raio (normalizado)
+        origin (Point3): ponto de origem do raio
+        direction (Vector3): vetor direção do raio (normalizado)
         Retorna a menor distância positiva ou None se não houver interseção.
         """
         # Vetor distância da origem para o centro da esfera
