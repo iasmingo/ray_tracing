@@ -6,9 +6,9 @@ class Point3:
     Ponto tridimensional
 
     Atributos:
-        x (float): Coordenada X do ponto
-        y (float): Coordenada Y do ponto
-        z (float): Coordenada Z do ponto
+        x (float): coordenada X do ponto
+        y (float): coordenada Y do ponto
+        z (float): coordenada Z do ponto
     """
     def __init__(self, x, y, z):
         self.x = x
@@ -45,9 +45,9 @@ class Vector3:
     Vetor tridimensional
 
     Atributos:
-        - x (float): Componente X do vetor
-        - y (float): Componente Y do vetor
-        - z (float): Componente Z do vetor
+        - x (float): componente X do vetor
+        - y (float): componente Y do vetor
+        - z (float): componente Z do vetor
     """
     def __init__(self, x, y, z):
         self.x = x
