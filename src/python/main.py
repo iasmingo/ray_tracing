@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 
 
 def main():
-    # Configuração da câmera em um ângulo que mostra mais de uma face
-    camera_pos = Point3(2, 2, 4)  # Posição deslocada para ver mais lados
-    camera_mira = Point3(0, 0, -2)  # Apontando para o centro da pirâmide
+    # Configuração da câmera
+    camera_pos = Point3(2, 2, 4) 
+    camera_mira = Point3(0, 0, -2)  
     camera_up = Vector3(0, 1, 0)
     distancia_tela = 1.0
     altura_resolucao = 500
@@ -24,7 +24,7 @@ def main():
         Point3(0, 1, -4)     # Ponto do topo
     ]
 
-    # Definição dos triângulos (índices dos vértices)
+    # Definição dos triângulos
     triangulos = [
         (0, 1, 4),  # Face frontal
         (1, 2, 4),  # Face lateral direita
@@ -37,26 +37,26 @@ def main():
     # Cores para cada triângulo
     cores = [Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.WHITE, Color.BLACK]
 
-    # Calcular as normais de cada triângulo
+    # Normais de cada triângulo
     normais = []
     for t in triangulos:
         v0, v1, v2 = vertices[t[0]], vertices[t[1]], vertices[t[2]]
         normal = (v1 - v0).cross(v2 - v0).normalize()
         normais.append(normal)
 
-    # Criar a malha triangular da pirâmide
+    # Malha triangular da pirâmide
     piramide = TriangleMesh(len(triangulos), len(vertices), vertices, triangulos, normais, [], cores[0])
 
     # Plano de fundo
     plano = Plane(Point3(0, -1, 0), Vector3(0, 1, 0), Color(0.5, 0.5, 0.5))
 
-    # Lista de objetos na cena
+    # Objetos na cena
     objetos = [piramide, plano]
 
-    # Renderizar a cena
+    # Renderização
     imagem = camera.draw(objetos)
 
-    # Salvar e exibir a imagem
+    # Salvamento e exibição da imagem
     plt.imshow(imagem)
     plt.axis('off')
     plt.savefig("image.png", bbox_inches='tight')
